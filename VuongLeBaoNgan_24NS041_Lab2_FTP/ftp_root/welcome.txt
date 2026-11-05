@@ -1,0 +1,2 @@
+Chào mừng bạn đến với VKU FTP Server (Lập Trình Mạng).
+Máy chủ FTP hỗ trợ RFC 959 đầy đủ chế độ PASV và PORT.

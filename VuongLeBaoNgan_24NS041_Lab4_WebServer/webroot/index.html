@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang='vi'>
+<head>
+    <meta charset='UTF-8'>
+    <title>VKU Web Server - Đa Dịch Vụ LTM</title>
+    <link rel='stylesheet' href='style.css'>
+</head>
+<body>
+    <div class='container'>
+        <header>
+            <h1>🚀 VKU HTTP Web Server (Lab 4 - LTM)</h1>
+            <p class='subtitle'>Máy chủ Web đa phương tiện hỗ trợ GET, HEAD, POST, Audio Streaming, Video Streaming, PDF</p>
+        </header>
+        <main class='grid'>
+            <div class='card'>
+                <div class='icon'>📄</div>
+                <h3>Dịch Vụ 1: Tài Liệu PDF (.pdf)</h3>
+                <p>Phục vụ tài liệu học phần Lập Trình Mạng với MIME type <code>application/pdf</code>.</p>
+                <a href='sample.pdf' class='btn' target='_blank'>Xem / Tải File PDF</a>
+            </div>
+            <div class='card'>
+                <div class='icon'>🎵</div>
+                <h3>Dịch Vụ 2: Âm Thanh MP3 (.mp3)</h3>
+                <p>Truyền phát âm thanh với MIME <code>audio/mpeg</code>.</p>
+                <audio controls src='sample.mp3' style='width:100%;margin-top:10px;'></audio><br/><br/>
+                <a href='sample.mp3' class='btn secondary' download>Tải Tệp MP3</a>
+            </div>
+            <div class='card'>
+                <div class='icon'>🎬</div>
+                <h3>Dịch Vụ 3: Video Streaming MP4 (.mp4)</h3>
+                <p>Hỗ trợ Byte-Range request (HTTP 206 Partial Content) để tua video mượt mà.</p>
+                <video controls src='sample.mp4' style='width:100%;max-height:180px;background:#000;margin-top:8px;'></video><br/><br/>
+                <a href='sample.mp4' class='btn secondary' download>Tải Tệp MP4</a>
+            </div>
+            <div class='card'>
+                <div class='icon'>⚡</div>
+                <h3>Dịch Vụ 4: REST API (GET / POST)</h3>
+                <p>API kiểm tra trạng thái máy chủ và gửi dữ liệu form.</p>
+                <a href='/api/stats' class='btn' target='_blank'>Gọi API /api/stats (JSON)</a>
+            </div>
+        </main>
+        <footer>
+            <p>Trường Đại học Công nghệ Thông tin & Truyền thông Việt - Hàn (VKU) | Khoa Khoa Học Máy Tính</p>
+        </footer>
+    </div>
+</body>
+</html>
