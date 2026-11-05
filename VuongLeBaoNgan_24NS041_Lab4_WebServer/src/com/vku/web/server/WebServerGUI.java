@@ -31,7 +31,8 @@ public class WebServerGUI extends JFrame {
         header.setBackground(new Color(2, 132, 199));
         header.setBorder(new EmptyBorder(12, 16, 12, 16));
 
-        statusLabel = new JLabel("  MÁY CHỦ WEB HTTP/1.1 ĐANG HOẠT ĐỘNG (http://localhost:" + server.getPort() + ")");
+        String dbStatus = server.getDatabase().isUsingMySQL() ? "MySQL: db_web" : "File Storage (.dat)";
+        statusLabel = new JLabel("  MÁY CHỦ WEB (Port " + server.getPort() + ") | DB: [" + dbStatus + "]");
         statusLabel.setForeground(Color.WHITE);
         statusLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
 
@@ -64,8 +65,8 @@ public class WebServerGUI extends JFrame {
         servicesPanel.add(new JLabel("📄 Tài liệu PDF (/sample.pdf)"));
         servicesPanel.add(new JLabel("🎵 Nhạc MP3 (/sample.mp3)"));
         servicesPanel.add(new JLabel("🎬 Video MP4 (/sample.mp4)"));
-        servicesPanel.add(new JLabel("⚡ REST API (/api/stats)"));
-        servicesPanel.add(new JLabel("📬 POST Endpoint (/api/echo)"));
+        servicesPanel.add(new JLabel("⚡ REST API (/api/stats, /api/posts)"));
+        servicesPanel.add(new JLabel("🗄️ CSDL: " + (server.getDatabase().isUsingMySQL() ? "MySQL (db_web)" : "File Storage (.dat)")));
 
         centerPanel.add(servicesPanel, BorderLayout.EAST);
         mainPanel.add(centerPanel, BorderLayout.CENTER);

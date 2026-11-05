@@ -2,6 +2,7 @@ package com.vku.web.server;
 
 import com.vku.web.common.HttpRequest;
 import com.vku.web.common.MimeTypes;
+import com.vku.web.db.WebDatabase;
 
 import java.io.*;
 import java.net.Socket;
@@ -131,7 +132,9 @@ public class HttpConnectionHandler implements Runnable {
                 out.flush();
             }
         } else if ("POST".equals(method)) {
-            // POST to file or static asset is usually echoed
+            // POST to file or static asset is usually echoed and saved to DB
+            String clientIp = socket.getInetAddress().getHostAddress();
+            server.getDatabase().savePost(clientIp, "POST " + path + ": " + (req.getBody() != null ? req.getBody() : ""));
             String respText = "Đã nhận yêu cầu POST tới tệp " + path + ". Dữ liệu gửi: " + req.getBody();
             byte[] bytes = respText.getBytes(StandardCharsets.UTF_8);
             sendHeaders(out, 200, "OK", "text/plain; charset=UTF-8", bytes.length, false);
@@ -197,8 +200,9 @@ public class HttpConnectionHandler implements Runnable {
     private void handleApi(HttpRequest req, OutputStream out) throws IOException {
         String path = req.getPath();
         if ("/api/stats".equalsIgnoreCase(path)) {
-            String json = String.format("{\"server\":\"VKU-HttpServer\",\"total_requests\":%d,\"port\":%d,\"time\":\"%s\"}",
-                    server.getTotalRequests(), server.getPort(), getServerDate());
+            String dbMode = server.getDatabase().isUsingMySQL() ? "MySQL (db_web: localhost:3306)" : "File Storage (.dat)";
+            String json = String.format("{\"server\":\"VKU-HttpServer\",\"total_requests\":%d,\"port\":%d,\"database\":\"%s\",\"time\":\"%s\"}",
+                    server.getTotalRequests(), server.getPort(), dbMode, getServerDate());
             byte[] bytes = json.getBytes(StandardCharsets.UTF_8);
             sendHeaders(out, 200, "OK", "application/json; charset=UTF-8", bytes.length, false);
             if (!"HEAD".equals(req.getMethod())) {
@@ -206,9 +210,28 @@ public class HttpConnectionHandler implements Runnable {
             }
             out.flush();
         } else if ("/api/echo".equalsIgnoreCase(path) || "/api/post".equalsIgnoreCase(path)) {
-            String json = String.format("{\"status\":\"success\",\"received_method\":\"%s\",\"body\":\"%s\",\"time\":\"%s\"}",
-                    req.getMethod(), req.getBody().replace("\"", "\\\"").replace("\n", "\\n"), getServerDate());
+            String clientIp = socket.getInetAddress().getHostAddress();
+            String body = req.getBody() != null ? req.getBody() : "";
+            server.getDatabase().savePost(clientIp, body);
+            String json = String.format("{\"status\":\"success\",\"received_method\":\"%s\",\"saved_to_db\":true,\"body\":\"%s\",\"time\":\"%s\"}",
+                    req.getMethod(), body.replace("\"", "\\\"").replace("\n", "\\n"), getServerDate());
             byte[] bytes = json.getBytes(StandardCharsets.UTF_8);
+            sendHeaders(out, 200, "OK", "application/json; charset=UTF-8", bytes.length, false);
+            if (!"HEAD".equals(req.getMethod())) {
+                out.write(bytes);
+            }
+            out.flush();
+        } else if ("/api/posts".equalsIgnoreCase(path)) {
+            List<WebDatabase.PostEntry> posts = server.getDatabase().getAllPosts();
+            StringBuilder sb = new StringBuilder("[");
+            for (int i = 0; i < posts.size(); i++) {
+                WebDatabase.PostEntry p = posts.get(i);
+                if (i > 0) sb.append(",");
+                sb.append(String.format("{\"timestamp\":%d,\"client_ip\":\"%s\",\"data\":\"%s\"}",
+                        p.timestamp, p.clientIp, (p.data != null ? p.data : "").replace("\"", "\\\"").replace("\n", "\\n")));
+            }
+            sb.append("]");
+            byte[] bytes = sb.toString().getBytes(StandardCharsets.UTF_8);
             sendHeaders(out, 200, "OK", "application/json; charset=UTF-8", bytes.length, false);
             if (!"HEAD".equals(req.getMethod())) {
                 out.write(bytes);

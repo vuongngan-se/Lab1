@@ -1,5 +1,7 @@
 package com.vku.web.server;
 
+import com.vku.web.db.WebDatabase;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -18,6 +20,7 @@ public class HttpWebServer {
     private final File webRoot;
     private final ExecutorService threadPool = Executors.newCachedThreadPool();
     private final AtomicLong totalRequests = new AtomicLong(0);
+    private final WebDatabase database = new WebDatabase();
     private ServerSocket serverSocket;
     private boolean running = false;
     private WebServerGUI gui;
@@ -214,6 +217,7 @@ public class HttpWebServer {
     }
 
     public long getTotalRequests() { return totalRequests.get(); }
+    public WebDatabase getDatabase() { return database; }
     public int getPort() { return port; }
     public File getWebRoot() { return webRoot; }
     public boolean isRunning() { return running; }

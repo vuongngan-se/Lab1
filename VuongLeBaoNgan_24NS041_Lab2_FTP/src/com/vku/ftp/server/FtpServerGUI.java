@@ -39,7 +39,8 @@ public class FtpServerGUI extends JFrame {
         header.setBackground(new Color(30, 41, 59));
         header.setBorder(new EmptyBorder(12, 16, 12, 16));
 
-        statusLabel = new JLabel("  MÁY CHỦ FTP: Đang chạy trên cổng " + server.getPort() + " (Tương thích FileZilla)");
+        String dbMode = server.getDatabase().isUsingMySQL() ? "MySQL: db_ftp (Port 3306)" : "File Storage (.dat)";
+        statusLabel = new JLabel("  MÁY CHỦ FTP: Cổng " + server.getPort() + " | CSDL: " + dbMode);
         statusLabel.setForeground(new Color(52, 211, 153));
         statusLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
 

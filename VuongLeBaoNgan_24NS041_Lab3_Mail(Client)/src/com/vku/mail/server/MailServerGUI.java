@@ -48,7 +48,8 @@ public class MailServerGUI extends JFrame {
             serverIp = java.net.InetAddress.getLocalHost().getHostAddress();
         } catch (Exception ignored) {}
 
-        JLabel badge = new JLabel("IP Máy Chủ: " + serverIp + " | Trạng thái: Đang hoạt động  ");
+        String dbMode = server.getDatabase().isUsingMySQL() ? "MySQL: db_mail" : "File Storage (.dat)";
+        JLabel badge = new JLabel("IP: " + serverIp + " | CSDL: " + dbMode + "  ");
         badge.setForeground(new Color(254, 226, 226));
         badge.setFont(new Font("Segoe UI", Font.BOLD, 13));
 
