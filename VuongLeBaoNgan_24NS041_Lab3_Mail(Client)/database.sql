@@ -51,3 +51,4 @@ ON DUPLICATE KEY UPDATE password=VALUES(password);
 INSERT INTO mail_messages (id, sender, recipient, subject, body, attachment_name, timestamp, is_read, is_deleted) VALUES
 ('MAIL-WELCOME-01', 'admin@localhost', 'alice@vku.udn.vn', 'Chào mừng bạn đến với VKU Mail Server', 'Xin chào Alice,\n\nHệ thống Mail Server Lập Trình Mạng hỗ trợ đầy đủ giao thức SMTP (gửi thư cổng 2525) và POP3 (nhận thư cổng 1100).\nChúc bạn thực hiện tốt bài Lab!\n\nTrân trọng,\nAdmin VKU', NULL, UNIX_TIMESTAMP() * 1000, FALSE, FALSE)
 ON DUPLICATE KEY UPDATE subject=VALUES(subject);
+

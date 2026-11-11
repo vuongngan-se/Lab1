@@ -37,3 +37,4 @@ INSERT INTO ftp_users (username, password, home_directory, can_write, can_delete
 ('vku', '123456', 'ftp_root', TRUE, FALSE, TRUE),
 ('anonymous', 'guest', 'ftp_root/public', FALSE, FALSE, TRUE)
 ON DUPLICATE KEY UPDATE password=VALUES(password);
+

@@ -35,3 +35,4 @@ INSERT INTO web_services (service_name, mime_type, file_path, description) VALUE
 ('Video Streaming MP4', 'video/mp4', 'sample.mp4', 'Dịch vụ video hỗ trợ tua HTTP 206 Partial Content'),
 ('REST API Thống Kê', 'application/json', '/api/stats', 'Dịch vụ cung cấp dữ liệu JSON từ MySQL')
 ON DUPLICATE KEY UPDATE service_name=VALUES(service_name);
+
